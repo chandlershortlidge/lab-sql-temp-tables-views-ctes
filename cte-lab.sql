@@ -21,11 +21,28 @@ c.email;
 -- The Temporary Table should use the rental summary view created in Step 1 to join with the payment table and 
 -- calculate the total amount paid by each customer.
 
-select
+create temporary table temp_total_spent_per_customer
+(select
 customer_id,
 SUM(amount) as total_spent_per_customer
 from payment
-group by customer_id
+group by customer_id);
+
+
+select
+cri.customer_id,
+cri.first_name,
+cri.last_name,
+cri.Number_of_Rentals_Per_Customer,
+tspc.total_spent_per_customer
+from 
+customer_rental_info as cri
+join
+temp_total_spent_per_customer as tspc
+on
+cri.customer_id = tspc.customer_id
+
+-- Error Code: 1054. Unknown column 'cri.total_spent_per_customer' in 'field list'
 
 
 
